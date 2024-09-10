@@ -1,5 +1,7 @@
 # React Native Todo List
 
+![mockup](./mockup.jpeg 'mockup')
+
 This is a todo list app built with React Native and Expo. It allows you to add, edit, and delete tasks. You can also mark tasks as completed.
 
 > **Note:** This project is built with [Expo](https://docs.expo.dev/get-started/introduction/)
