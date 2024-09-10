@@ -3,7 +3,6 @@ import { SafeAreaView, useColorScheme, StyleSheet } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import useLoadFonts from '@/hooks/useLoadFonts'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import HomeScreen from '@/components/HomeScreen'
 import TodoList from '@/components/TodoList'
 
 const Stack = createNativeStackNavigator()
@@ -42,18 +41,10 @@ export default function Layout() {
       {/* App Screens */}
       <Stack.Navigator>
         <Stack.Screen
-          name='HomeScreen'
-          component={HomeScreen}
-          options={{
-            title: 'Home',
-            headerShown: false,
-            ...commonHeaderOptions,
-          }}
-        />
-        <Stack.Screen
           name='TodoList'
           component={TodoList}
           options={{
+            headerShown: false,
             ...commonHeaderOptions,
           }}
         />
