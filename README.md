@@ -1,6 +1,6 @@
-# React Native Essentials
+# React Native Todo List
 
-This is a repository for testing React Native features
+This is a todo list app built with React Native and Expo. It allows you to add, edit, and delete tasks. You can also mark tasks as completed.
 
 > **Note:** This project is built with [Expo](https://docs.expo.dev/get-started/introduction/)
 
