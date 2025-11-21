@@ -1,12 +1,12 @@
 import { FlatList, View, useColorScheme, StyleSheet } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useTodosStore } from '@/store'
 import SwipableTodo from '@/components/SwipableTodo'
 import CompletedTodosHeader from '@/components/CompletedTodosHeader'
 import colors from '@/styles/colors'
 
 export default function Todos() {
   const colorScheme = useColorScheme()
-  const todos = useSelector((state) => state.todos)
+  const todos = useTodosStore((state) => state.todos)
 
   const incompleteTodos = todos.filter((todo) => !todo.completed)
   const completedTodos = todos.filter((todo) => todo.completed)

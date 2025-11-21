@@ -10,15 +10,15 @@ import {
   StyleSheet,
 } from 'react-native'
 import * as Haptics from 'expo-haptics'
-import { useSelector, useDispatch } from 'react-redux'
-import { addTodo } from '@/features/todos/todosSlice'
-import { setNewTodoInput } from '@/features/todos/newTodoInputSlice'
+import { useTodosStore } from '@/store'
+import { useNewTodoInputStore } from '@/store'
 import useValidateTodo from '@/hooks/useValidateTodo'
 
 export default function AddTodo() {
   const colorScheme = useColorScheme()
-  const newTodoInput = useSelector((state) => state.newTodoInput)
-  const dispatch = useDispatch()
+  const newTodoInput = useNewTodoInputStore((state) => state.newTodoInput)
+  const setNewTodoInput = useNewTodoInputStore((state) => state.setNewTodoInput)
+  const addTodo = useTodosStore((state) => state.addTodo)
   const { validate } = useValidateTodo()
 
   const handleAddTodo = () => {
@@ -31,15 +31,15 @@ export default function AddTodo() {
     }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    dispatch(addTodo(trimmedNewTodoInput)) // redux action
-    dispatch(setNewTodoInput(''))
+    addTodo(trimmedNewTodoInput)
+    setNewTodoInput('')
   }
 
   return (
     <View style={styles.addTodoContainer}>
       <TextInput
         value={newTodoInput}
-        onChangeText={(text) => dispatch(setNewTodoInput(text))}
+        onChangeText={setNewTodoInput}
         placeholder='New Todo'
         placeholderTextColor={
           colorScheme === 'dark' ? 'rgb(129, 129, 136)' : 'rgb(145, 145, 152)'

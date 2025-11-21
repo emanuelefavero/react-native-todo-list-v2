@@ -1,11 +1,11 @@
 import { useRef } from 'react'
 import { Animated } from 'react-native'
-import { useDispatch } from 'react-redux'
 import * as Haptics from 'expo-haptics'
-import { deleteTodo, completeTodo } from '@/features/todos/todosSlice'
+import { useTodosStore } from '@/store'
 
 export default function useSwipeGesture(todo) {
-  const dispatch = useDispatch()
+  const deleteTodo = useTodosStore((state) => state.deleteTodo)
+  const completeTodo = useTodosStore((state) => state.completeTodo)
   const translateX = useRef(new Animated.Value(0)).current
   const swipeTriggerDistance = 125
 
@@ -18,10 +18,10 @@ export default function useSwipeGesture(todo) {
 
         if (swipeDistance > swipeTriggerDistance) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-          dispatch(deleteTodo(todo.id))
+          deleteTodo(todo.id)
         } else if (swipeDistance < -swipeTriggerDistance) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-          dispatch(completeTodo(todo.id))
+          completeTodo(todo.id)
         }
       },
     }

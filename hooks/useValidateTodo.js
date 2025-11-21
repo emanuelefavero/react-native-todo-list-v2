@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux'
+import { useTodosStore } from '@/store'
 
 export default function useValidateTodo() {
-  const todos = useSelector((state) => state.todos)
+  const todos = useTodosStore((state) => state.todos)
 
   const validate = (input) => {
     const trimmedNewTodoInput = input.trim()

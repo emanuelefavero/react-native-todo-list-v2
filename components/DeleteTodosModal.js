@@ -9,20 +9,21 @@ import {
   StyleSheet,
 } from 'react-native'
 import * as Haptics from 'expo-haptics'
-import { useSelector, useDispatch } from 'react-redux'
-import { setShowDeleteTodosModal } from '@/features/modal/showDeleteTodosModalSlice'
-import {
-  deleteAllTodos,
-  deleteCompletedTodos,
-} from '@/features/todos/todosSlice'
+import { useTodosStore, useModalStore } from '@/store'
 
 export default function DeleteTodosModal() {
   const colorScheme = useColorScheme()
-  const dispatch = useDispatch()
-  const showDeleteTodosModal = useSelector(
+  const showDeleteTodosModal = useModalStore(
     (state) => state.showDeleteTodosModal
   )
-  const modalType = useSelector((state) => state.modalType)
+  const modalType = useModalStore((state) => state.modalType)
+  const setShowDeleteTodosModal = useModalStore(
+    (state) => state.setShowDeleteTodosModal
+  )
+  const deleteAllTodos = useTodosStore((state) => state.deleteAllTodos)
+  const deleteCompletedTodos = useTodosStore(
+    (state) => state.deleteCompletedTodos
+  )
 
   return (
     <Modal
@@ -37,7 +38,7 @@ export default function DeleteTodosModal() {
         ]}
         // Close the modal when clicking outside of it
         onStartShouldSetResponder={() => {
-          dispatch(setShowDeleteTodosModal(false))
+          setShowDeleteTodosModal(false)
           return true
         }}
       >
@@ -68,7 +69,7 @@ export default function DeleteTodosModal() {
           <View style={styles.buttonContainer}>
             <Button
               title='Cancel'
-              onPress={() => dispatch(setShowDeleteTodosModal(false))}
+              onPress={() => setShowDeleteTodosModal(false)}
             />
             <Button
               title='Delete'
@@ -76,12 +77,12 @@ export default function DeleteTodosModal() {
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
 
-                dispatch(
-                  modalType === 'deleteAllTodos'
-                    ? deleteAllTodos()
-                    : deleteCompletedTodos()
-                )
-                dispatch(setShowDeleteTodosModal(false))
+                if (modalType === 'deleteAllTodos') {
+                  deleteAllTodos()
+                } else {
+                  deleteCompletedTodos()
+                }
+                setShowDeleteTodosModal(false)
               }}
             />
           </View>

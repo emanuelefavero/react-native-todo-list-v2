@@ -10,12 +10,12 @@ import {
   Animated,
 } from 'react-native'
 import * as Haptics from 'expo-haptics'
-import { useDispatch } from 'react-redux'
-import { completeTodo, editTodo } from '@/features/todos/todosSlice'
+import { useTodosStore } from '@/store'
 
 export default function Todo({ todo }) {
   const colorScheme = useColorScheme()
-  const dispatch = useDispatch()
+  const completeTodo = useTodosStore((state) => state.completeTodo)
+  const editTodo = useTodosStore((state) => state.editTodo)
   const [isPressed, setIsPressed] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [newValue, setNewValue] = useState(todo.value)
@@ -44,15 +44,15 @@ export default function Todo({ todo }) {
       }),
     ]).start(() => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-      dispatch(completeTodo(todo.id))
+      completeTodo(todo.id)
     })
   }
 
-  // Dispatch the editTodo action to Redux when editing is done
+  // Dispatch the editTodo action to Zustand when editing is done
   const handleEditTodo = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
     setIsEditing(false) // Exit editing mode
-    dispatch(editTodo({ id: todo.id, value: newValue })) // Dispatch editTodo
+    editTodo(todo.id, newValue) // Call editTodo
   }
 
   // Interpolated background color for press feedback

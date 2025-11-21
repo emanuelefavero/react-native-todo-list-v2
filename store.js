@@ -1,52 +1,60 @@
-import {
-  combineReducers,
-  configureStore,
-  getDefaultMiddleware,
-} from '@reduxjs/toolkit'
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist'
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import showDeleteTodosModalReducer from '@/features/modal/showDeleteTodosModalSlice'
-import modalTypeReducer from '@/features/modal/modalTypeSlice'
-import todosReducer from '@/features/todos/todosSlice'
-import newTodoInputReducer from '@/features/todos/newTodoInputSlice'
+import { initialTodos } from '@/data/initialTodos'
+import uuid from 'react-native-uuid'
 
-// Configure redux-persist with AsyncStorage
-const persistConfig = {
-  key: 'root', // The key to use when storing the state
-  storage: AsyncStorage, // AsyncStorage is the storage engine
-  whitelist: ['todos'], // Only persist the todos slice
-}
-
-// Combine all reducers
-const rootReducer = combineReducers({
-  showDeleteTodosModal: showDeleteTodosModalReducer,
-  modalType: modalTypeReducer,
-  todos: todosReducer,
-  newTodoInput: newTodoInputReducer,
-})
-
-// Create a persisted reducer
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-// Create a Redux store
-export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+// Todos store with persistence
+export const useTodosStore = create(
+  persist(
+    (set, get) => ({
+      todos: initialTodos,
+      addTodo: (value) =>
+        set((state) => ({
+          todos: [{ id: uuid.v4(), value, completed: false }, ...state.todos],
+        })),
+      completeTodo: (id) =>
+        set((state) => {
+          const updatedTodos = state.todos.map((todo) =>
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+          )
+          return {
+            todos: updatedTodos.sort((a, b) => a.completed - b.completed),
+          }
+        }),
+      editTodo: (id, value) =>
+        set((state) => ({
+          todos: state.todos.map((todo) =>
+            todo.id === id ? { ...todo, value } : todo
+          ),
+        })),
+      deleteTodo: (id) =>
+        set((state) => ({
+          todos: state.todos.filter((todo) => todo.id !== id),
+        })),
+      deleteAllTodos: () => set({ todos: [] }),
+      deleteCompletedTodos: () =>
+        set((state) => ({
+          todos: state.todos.filter((todo) => !todo.completed),
+        })),
     }),
-})
+    {
+      name: 'todos-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+)
 
-// Create a persisted store
-export const persistor = persistStore(store)
+// Modal store
+export const useModalStore = create((set) => ({
+  showDeleteTodosModal: false,
+  modalType: 'deleteAllTodos',
+  setShowDeleteTodosModal: (value) => set({ showDeleteTodosModal: value }),
+  setModalType: (value) => set({ modalType: value }),
+}))
+
+// New todo input store
+export const useNewTodoInputStore = create((set) => ({
+  newTodoInput: '',
+  setNewTodoInput: (value) => set({ newTodoInput: value }),
+}))
