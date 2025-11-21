@@ -4,8 +4,9 @@ import TodosTitle from '@/components/TodosTitle'
 import Todos from '@/components/Todos'
 import AddTodo from '@/components/AddTodo'
 import DeleteTodosModal from '@/components/DeleteTodosModal'
+import { memo } from 'react'
 
-export default function TodoList() {
+const TodoList = () => {
   const colorScheme = useColorScheme() // dark mode
 
   return (
@@ -36,3 +37,5 @@ const darkStyles = StyleSheet.create({
     backgroundColor: colors.backgroundDark,
   },
 })
+
+export default memo(TodoList)

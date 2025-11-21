@@ -57,6 +57,7 @@ export default function Layout() {
             borderTopColor:
               colorScheme === 'dark' ? colors.borderDark : colors.border,
           },
+          animation: 'shift',
           headerStyle: {
             backgroundColor:
               colorScheme === 'dark'
