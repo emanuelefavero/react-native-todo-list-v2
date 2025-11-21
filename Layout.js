@@ -5,8 +5,8 @@ import { StatusBar } from 'expo-status-bar'
 import useLoadFonts from '@/hooks/useLoadFonts'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
-import TodoList from '@/components/TodoList'
-import About from '@/components/About'
+import TodoList from '@/screens/TodoList'
+import About from '@/screens/About'
 
 const Tab = createBottomTabNavigator() // create bottom tab navigator ↓
 
