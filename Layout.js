@@ -77,6 +77,7 @@ export default function Layout() {
           component={About}
           options={{
             title: 'About',
+            headerShown: false,
           }}
         />
       </Tab.Navigator>
