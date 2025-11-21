@@ -8,15 +8,16 @@ import { Ionicons } from '@expo/vector-icons'
 import TodoList from '@/components/TodoList'
 import About from '@/components/About'
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator() // create bottom tab navigator ↓
 
 export default function Layout() {
-  const colorScheme = useColorScheme() // dark mode
+  const colorScheme = useColorScheme() // check dark/light mode
   const { loaded, error } = useLoadFonts() // load fonts
 
   if (!loaded && !error) return null // show nothing while fonts are loading
 
   return (
+    // Main layout container
     <SafeAreaView
       style={[
         styles.appSafeArea,
@@ -28,10 +29,12 @@ export default function Layout() {
 
       {/* App Screens */}
       <Tab.Navigator
+        // Screen options for the tab navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName
 
+            // Determine icon name based on route
             if (route.name === 'TodoList') {
               iconName = focused ? 'list' : 'list-outline'
             } else if (route.name === 'About') {
@@ -42,9 +45,13 @@ export default function Layout() {
 
             return <Ionicons name={iconName} size={size} color={color} />
           },
+
+          // Tab bar colors
           tabBarActiveTintColor:
             colorScheme === 'dark' ? colors.textDark : colors.text,
           tabBarInactiveTintColor: 'gray',
+
+          // Tab bar style
           tabBarStyle: {
             backgroundColor:
               colorScheme === 'dark'
@@ -57,20 +64,29 @@ export default function Layout() {
             borderTopColor:
               colorScheme === 'dark' ? colors.borderDark : colors.border,
           },
-          animation: 'shift',
+
+          // Tab bar animation when switching tabs
+          animation: 'shift', // 'shift' | 'fade' | 'none'
+
+          // Header styles
           headerStyle: {
             backgroundColor:
               colorScheme === 'dark'
                 ? colors.backgroundDark
                 : colors.background,
           },
+
+          // Header text styles
           headerTintColor:
             colorScheme === 'dark' ? colors.textDark : colors.text,
+
+          // Header title text styles
           headerTitleStyle: {
             fontWeight: 'bold',
           },
         })}
       >
+        {/* Tab Screens */}
         <Tab.Screen
           name='TodoList'
           component={TodoList}
