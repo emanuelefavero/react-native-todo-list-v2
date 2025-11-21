@@ -50,6 +50,12 @@ export default function Layout() {
               colorScheme === 'dark'
                 ? colors.backgroundDark
                 : colors.background,
+            height: 40,
+            paddingTop: 0,
+            paddingBottom: 0,
+            borderTopWidth: 1,
+            borderTopColor:
+              colorScheme === 'dark' ? colors.borderDark : colors.border,
           },
           headerStyle: {
             backgroundColor:
