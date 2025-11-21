@@ -3,31 +3,18 @@ import { useColorScheme, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
 import useLoadFonts from '@/hooks/useLoadFonts'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { Ionicons } from '@expo/vector-icons'
 import TodoList from '@/components/TodoList'
+import About from '@/components/About'
 
-const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
 export default function Layout() {
   const colorScheme = useColorScheme() // dark mode
   const { loaded, error } = useLoadFonts() // load fonts
 
   if (!loaded && !error) return null // show nothing while fonts are loading
-
-  const commonHeaderOptions = {
-    headerStyle: {
-      // Header background color
-      backgroundColor:
-        colorScheme === 'dark' ? colors.backgroundDark : colors.background,
-    },
-    // Header text color
-    headerTintColor: colorScheme === 'dark' ? colors.textDark : colors.text,
-
-    // Header text style
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }
 
   return (
     <SafeAreaView
@@ -40,16 +27,59 @@ export default function Layout() {
       <StatusBar style='auto' translucent />
 
       {/* App Screens */}
-      <Stack.Navigator>
-        <Stack.Screen
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName
+
+            if (route.name === 'TodoList') {
+              iconName = focused ? 'list' : 'list-outline'
+            } else if (route.name === 'About') {
+              iconName = focused
+                ? 'information-circle'
+                : 'information-circle-outline'
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />
+          },
+          tabBarActiveTintColor:
+            colorScheme === 'dark' ? colors.textDark : colors.text,
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle: {
+            backgroundColor:
+              colorScheme === 'dark'
+                ? colors.backgroundDark
+                : colors.background,
+          },
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'dark'
+                ? colors.backgroundDark
+                : colors.background,
+          },
+          headerTintColor:
+            colorScheme === 'dark' ? colors.textDark : colors.text,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        })}
+      >
+        <Tab.Screen
           name='TodoList'
           component={TodoList}
           options={{
+            title: 'Todo List',
             headerShown: false,
-            ...commonHeaderOptions,
           }}
         />
-      </Stack.Navigator>
+        <Tab.Screen
+          name='About'
+          component={About}
+          options={{
+            title: 'About',
+          }}
+        />
+      </Tab.Navigator>
     </SafeAreaView>
   )
 }
