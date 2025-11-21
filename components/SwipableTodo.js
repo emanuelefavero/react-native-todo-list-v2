@@ -35,7 +35,7 @@ export default function SwipableTodo({ todo, colorScheme }) {
       >
         <Animated.Text style={{ transform: [{ scale: iconSize }] }}>
           <AntDesign
-            name={todo.completed ? 'arrowup' : 'check'}
+            name={todo.completed ? 'arrow-up' : 'check'}
             size={22}
             color={colorScheme === 'dark' ? colors.text : colors.textDark}
           />
