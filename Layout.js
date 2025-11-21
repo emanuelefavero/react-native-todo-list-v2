@@ -1,5 +1,6 @@
 import colors from '@/styles/colors'
-import { SafeAreaView, useColorScheme, StyleSheet } from 'react-native'
+import { useColorScheme, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
 import useLoadFonts from '@/hooks/useLoadFonts'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
