@@ -1,14 +1,13 @@
 import React from 'react'
 import { View, Animated, StyleSheet } from 'react-native'
-import { PanGestureHandler } from 'react-native-gesture-handler'
+import { GestureDetector } from 'react-native-gesture-handler'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import useSwipeGesture from '@/hooks/useSwipeGesture'
 import colors from '@/styles/colors'
 import Todo from './Todo'
 
 export default function SwipableTodo({ todo, colorScheme }) {
-  const { translateX, onGestureEvent, onHandlerStateChange } =
-    useSwipeGesture(todo)
+  const { translateX, panGesture } = useSwipeGesture(todo)
 
   const iconSize = translateX.interpolate({
     inputRange: [-100, 0, 100],
@@ -54,17 +53,11 @@ export default function SwipableTodo({ todo, colorScheme }) {
         </Animated.Text>
       </Animated.View>
 
-      <PanGestureHandler
-        onGestureEvent={onGestureEvent}
-        onHandlerStateChange={onHandlerStateChange}
-        // Only activate the swipe gesture when the movement is horizontal
-        activeOffsetX={[-30, 30]} // Horizontal swipe sensitivity
-        activeOffsetY={[-100, 100]} // Allow vertical gestures to pass through
-      >
+      <GestureDetector gesture={panGesture}>
         <Animated.View style={{ transform: [{ translateX }] }}>
           <Todo todo={todo} />
         </Animated.View>
-      </PanGestureHandler>
+      </GestureDetector>
     </View>
   )
 }
